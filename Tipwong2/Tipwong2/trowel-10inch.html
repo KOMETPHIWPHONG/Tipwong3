@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดสินค้า - TIPWONG INDUSTRIAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght=300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Anuphan', sans-serif;
+        }
+
+        .horizontal-table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .horizontal-table-container::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+
+        .horizontal-table-container::-webkit-scrollbar-thumb {
+            background: #dfd3b0;
+            border-radius: 10px;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #fdfcf9;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e3d9bf;
+            border-radius: 10px;
+        }
+
+        .star-slider {
+            accent-color: #b49352;
+        }
+
+        .star-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #1e2d4a;
+            cursor: pointer;
+            border: 2px solid #b49352;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-[#f7f4eb] via-[#f1ebd9] to-[#e6dcbf] min-h-screen p-4 md:p-8 flex items-center justify-center relative overflow-x-hidden">
+
+    <div
+        class="absolute inset-0 opacity-[0.04] pointer-events-none bg-[linear-gradient(to_right,#b49352_1px,transparent_1px),linear-gradient(to_bottom,#b49352_1px,transparent_1px)] bg-[size:32px_32px]">
+    </div>
+
+    <div class="fixed top-4 left-4 z-40">
+        <a href="index.html"
+            class="flex items-center gap-2 bg-[#1e2d4a] hover:bg-[#2a3e63] text-[#fdfcf9] hover:text-[#b49352] border border-[#b49352]/30 px-4 py-2 rounded-xl text-xs font-bold shadow-lg transition-all duration-300 backdrop-blur-sm group">
+            <i class="fa-solid fa-house transition-transform group-hover:-translate-y-0.5"></i>
+            <span>หน้าเมนูหลัก</span>
+        </a>
+    </div>
+
+    <div id="toast-notification"
+        class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-xl bg-white rounded-2xl shadow-xl border border-emerald-100 p-4 flex items-start gap-3 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div
+            class="bg-emerald-500 text-white rounded-lg p-2 flex items-center justify-center shrink-0 w-10 h-10 text-lg shadow-sm">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1">✨ บันทึกรายการสำเร็จ!</h4>
+            <p id="toast-item-details" class="text-[11px] text-slate-500 truncate mt-0.5">สินค้า: เกรียงสี่เหลี่ยมขัดมัน
+                ขนาด: 10 นิ้ว ราคา: ราคาปลีก จำนวน: 12 ชิ้น</p>
+        </div>
+        <button onclick="closeToast()" class="text-slate-300 hover:text-slate-500 text-sm p-1">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <div id="toast-review-notification"
+        class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-[#1e2d4a] text-white rounded-2xl shadow-2xl border border-[#b49352]/40 p-4 flex items-center gap-3 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div
+            class="bg-gradient-to-br from-[#b49352] to-[#8c6f34] text-white rounded-xl p-2 flex items-center justify-center shrink-0 w-10 h-10 text-base shadow-md animate-bounce">
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-[#b49352]">✨ ส่งความคิดเห็นสำเร็จ!</h4>
+            <p class="text-[11px] text-slate-300 mt-0.5">ขอบคุณสำหรับรีวิวและข้อมูลของคุณครับ</p>
+        </div>
+        <button onclick="closeReviewToast()" class="text-slate-400 hover:text-white text-sm p-1">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <div id="quotation-modal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div
+            class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform scale-95 transition-transform duration-300">
+            <div class="flex items-center justify-between p-4 border-b border-slate-100">
+                <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-invoice-dollar text-red-600"></i> รายการขอใบเสนอราคาทั้งหมด
+                </h3>
+                <button onclick="closeModal()"
+                    class="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+            <div class="p-4 bg-slate-50/50">
+                <div
+                    class="bg-white border border-slate-200/80 rounded-xl p-4 flex justify-between items-center shadow-sm">
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800">เกรียงสี่เหลี่ยมขัดมัน</h4>
+                        <p id="modal-spec" class="text-[11px] text-red-600 font-bold mt-1">สเปกขนาด: TL01 (ด้ามไม้) •
+                            ราคาปลีก</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="modal-qty" class="text-xs font-bold text-slate-800 block">12 PCS</span>
+                        <span id="modal-price" class="text-[10px] text-slate-400 font-light">ราคา 65 บาท/กล่อง</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100">
+                <a href="https://line.me" target="_blank"
+                    class="flex items-center justify-center gap-2 bg-[#06C755] text-white rounded-xl py-3 text-xs font-bold hover:brightness-105 transition-all shadow-md w-full text-center">
+                    <i class="fa-brands fa-line text-base"></i> ส่งรายการนี้เพื่อขอราคาพิเศษใน LINE
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <main
+        class="w-full max-w-6xl bg-gradient-to-b from-[#fdfcf9] to-[#f9f6ee] rounded-[2.5rem] shadow-2xl border-2 border-[#e3d7b9] p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
+
+        <div class="md:col-span-5 w-full md:sticky md:top-6 space-y-4">
+            <div
+                class="flex flex-col justify-center items-center bg-gradient-to-br from-[#f5edd6] via-[#ede3c5] to-[#dfd3b0] rounded-[2rem] p-6 border border-[#dfd2ad] aspect-square w-full relative overflow-hidden shadow-inner">
+                <span
+                    class="absolute top-4 right-4 bg-[#1e2d4a] text-[#fcfbf7] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-md z-20">PREMIUM
+                    SPEC</span>
+
+                <div class="w-full h-full flex items-center justify-center relative overflow-hidden rounded-xl">
+                    <div id="image-slider-wrapper"
+                        class="flex w-full h-full transition-transform duration-500 ease-out">
+                        <div class="w-full h-full flex items-center justify-center shrink-0 p-2">
+                            <img src="image/ด้ามไม้ 10.jpg" alt="เกรียงขัดมัน ด้ามไม้ 10 นิ้ว"
+                                class="max-h-64 object-contain drop-shadow-[0_10px_20px_rgba(30,45,74,0.15)] transition-transform duration-500 hover:scale-105">
+                        </div>
+                        <div class="w-full h-full flex items-center justify-center shrink-0 p-2">
+                            <img src="image/เกรียงสี่เหลี่ยม.jpg" alt="เกรียงขัดมัน ด้ามพลาสติก 10 นิ้ว"
+                                class="max-h-64 object-contain drop-shadow-[0_10px_20px_rgba(30,45,74,0.15)] transition-transform duration-500 hover:scale-105">
+                        </div>
+                        <div class="w-full h-full flex items-center justify-center shrink-0 p-2">
+                            <img src="image/เกรียงหวีสี่เหลี่ยม.jpg"
+                                alt="เกรียงหวีสี่เหลี่ยม ขัดมัน ด้ามพลาสติก 10 นิ้ว"
+                                class="max-h-64 object-contain drop-shadow-[0_10px_20px_rgba(30,45,74,0.15)] transition-transform duration-500 hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="moveSlider(-1)"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 border border-[#b49352]/30 flex items-center justify-center text-[#1e2d4a] hover:bg-white transition-all shadow z-20">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button onclick="moveSlider(1)"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 border border-[#b49352]/30 flex items-center justify-center text-[#1e2d4a] hover:bg-white transition-all shadow z-20">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+
+                <div class="absolute bottom-4 flex gap-2 z-20">
+                    <span class="dot w-2 h-2 rounded-full bg-[#1e2d4a] transition-all duration-300"></span>
+                    <span class="dot w-2 h-2 rounded-full bg-[#1e2d4a]/30 transition-all duration-300"></span>
+                    <span class="dot w-2 h-2 rounded-full bg-[#1e2d4a]/30 transition-all duration-300"></span>
+                </div>
+            </div>
+            <a href="https://line.me" target="_blank"
+                class="flex items-center justify-center gap-2 bg-[#06C755] text-white rounded-2xl py-3.5 text-xs font-bold hover:brightness-105 transition-all shadow-md w-full text-center">
+                <i class="fa-brands fa-line text-base"></i> สอบถามราคาส่งยกลังพิเศษผ่าน LINE
+            </a>
+                        <div
+                class="bg-gradient-to-r from-[#1e2d4a] to-[#2a3e63] text-white p-4 rounded-2xl shadow-md border border-[#2e3f5e] space-y-2">
+                <h3 class="text-xs font-bold text-[#b49352] flex items-center gap-2">
+                    <i class="fa-solid fa-trowel"></i> การใช้งานทั่วไป (Application)
+                </h3>
+                <p class="text-xs text-slate-200 leading-relaxed font-light">
+                    เหมาะสำหรับงาน <span
+                        class="font-bold text-white underline decoration-[#b49352] decoration-2">ปาดปูนให้เรียบ งานฉาบ
+                        และงานขัดมันผิวคอนกรีต</span> ช่วยไล่เม็ดทรายและดึงน้ำปูนขึ้นมาเพื่อให้ผิวหน้าเนียนแน่น เงางาม
+                    ใบเกรียงเหล็กสปริงตัวดี ไม่บิดงอง่าย มีให้เลือกทั้งด้ามพลาสติก (DEKOK) ทนทานล้างง่าย
+                    และด้ามไม้จับถนัดมือกระชับช่าง
+                </p>
+            </div>
+
+            <div
+                class="bg-gradient-to-r from-[#1e2d4a] to-[#2a3e63] text-white p-4 rounded-2xl shadow-md border border-[#2e3f5e] space-y-2">
+                <h3 class="text-xs font-bold text-[#b49352] flex items-center gap-2">
+                    <i class="fa-solid fa-trowel-grow"></i> การใช้งานทั่วไป (Application)
+                </h3>
+                <p class="text-xs text-slate-200 leading-relaxed font-light">
+                    เหมาะสำหรับงาน <span
+                        class="font-bold text-white underline decoration-[#b49352] decoration-2">ปูกระเบื้องปูพื้นและผนังทุกขนาด</span>
+                    ใช้สำหรับครูดปูนกาวให้เป็นร่องสม่ำเสมอ ช่วยให้ปูนยึดเกาะหลังกระเบื้องได้เต็มแผ่น ทั่วถึง
+                    ลดการเกิดโพรงอากาศ ป้องกันปัญหากระเบื้องหลุดล่อนหรือแตกหักในอนาคตได้อย่างมีประสิทธิภาพ
+                </p>
+            </div>
+
+        </div>
+
+        <div class="md:col-span-7 space-y-6">
+            <div class="space-y-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span
+                        class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-r from-[#9e2a2a] to-[#701515] px-3.5 py-1 rounded-full shadow-sm">
+                        <i class="fa-solid fa-industry"></i> TIPWONG INDUSTRIAL
+                    </span>
+                    <span
+                        class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> มีสินค้าพร้อมส่ง
+                    </span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-[#1e2d4a] tracking-tight leading-tight">
+                    เกรียงสี่เหลี่ยมขัดมัน (10 นิ้ว)<br>
+                    <span
+                        class="text-base md:text-lg font-bold bg-gradient-to-r from-[#1e2d4a] via-[#b49352] to-[#1e2d4a] bg-clip-text text-transparent">เกรียงขัดมันผิวคอนกรีต
+                        ด้ามไม้และด้ามพลาสติก แข็งแรง ทนทาน งานเนี้ยบ</span>
+                </h1>
+            </div>
+
+
+            <!-- ตารางจำหน่าย: ราคาส่ง -->
+            <div class="border border-blue-200 rounded-2xl overflow-hidden shadow-md bg-[#fdfcf9]">
+                <div class="bg-blue-900 text-white px-4 py-3 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-tags text-blue-300"></i>
+                    <span>ตารางจำหน่าย: ราคาส่ง (ต่อชิ้น)</span>
+                </div>
+                <div class="overflow-x-auto p-3 custom-scroll">
+                    <table class="w-full text-center border-separate border-spacing-1 min-w-[500px] text-xs">
+                        <thead>
+                            <tr class="text-blue-900 font-bold bg-blue-50 text-[11px]">
+                                <th class="p-2 border border-blue-100 rounded-xl bg-white shadow-sm w-3/5 text-left">
+                                    รายละเอียดสินค้า</th>
+                                <th class="p-2 border border-blue-100 rounded-xl bg-white shadow-sm w-1/5">กล่อง</th>
+                                <th class="p-2 border border-blue-100 rounded-xl bg-white shadow-sm w-1/5">ราคา/ชิ้น
+                                    (ส่ง)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงสี่เหลี่ยมขัดมัน ด้ามไม้ 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    55 บาท</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงสี่เหลี่ยมขัดมัน ด้ามพลาสติก 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    58 บาท</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงหวีสี่เหลี่ยม ขัดมัน ด้ามพลาสติก 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    58 บาท</td>
+                            </tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ตารางจำหน่าย: ราคาปลีก -->
+            <div class="border border-red-200 rounded-2xl overflow-hidden shadow-md bg-[#fdfcf9]">
+                <div class="bg-red-800 text-white px-4 py-3 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-tags text-red-300"></i>
+                    <span>ตารางจำหน่าย: ราคาปลีก (ต่อชิ้น)</span>
+                </div>
+                <div class="overflow-x-auto p-3 custom-scroll">
+                    <table class="w-full text-center border-separate border-spacing-1 min-w-[500px] text-xs">
+                        <thead>
+                            <tr class="text-red-900 font-bold bg-red-50 text-[11px]">
+                                <th class="p-2 border border-red-100 rounded-xl bg-white shadow-sm w-3/5 text-left">
+                                    รายละเอียดสินค้า</th>
+                                <th class="p-2 border border-red-100 rounded-xl bg-white shadow-sm w-1/5">กล่อง</th>
+                                <th class="p-2 border border-red-100 rounded-xl bg-white shadow-sm w-1/5">ราคา/ชิ้น
+                                    (ปลีก)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงสี่เหลี่ยมขัดมัน ด้ามไม้ 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    65 บาท</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงสี่เหลี่ยมขัดมัน ด้ามพลาสติก 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    68 บาท</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-600 text-left">
+                                    เกรียงหวีสี่เหลี่ยม ขัดมัน ด้ามพลาสติก 10 นิ้ว (280mm.x120mm.)</td>
+                                <td class="p-2 bg-white border border-slate-200 rounded-xl text-slate-500">12 ชิ้น/กล่อง
+                                </td>
+                                <td
+                                    class="p-2 bg-white border border-slate-200 rounded-xl font-extrabold text-red-600 text-sm">
+                                    68 บาท</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+<div class="bg-gradient-to-b from-[#ede6d0] to-[#e4dac0] border border-[#d3c6a4] p-4 rounded-2xl space-y-3 shadow-inner">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        
+        <!-- 1. ย้ายเรทราคามาไว้ช่องแรก -->
+        <div>
+            <label class="block text-[10px] font-bold text-slate-700 mb-1">เลือกเรทราคา</label>
+            <select id="price-type-select"
+                class="w-full bg-[#fdfcf9] border border-[#c5b896] rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-700 focus:outline-none">
+                <option value="ราคาปลีก">ราคาปลีก</option>
+                <option value="ราคาส่งยกลัง">ราคาส่งยกลัง (สั่งจำนวนมาก)</option>
+            </select>
+        </div>
+
+        <!-- 2. รหัสสินค้า -->
+        <div>
+            <label class="block text-[10px] font-bold text-slate-700 mb-1">เลือกรหัสสินค้า</label>
+            <select id="product-size-select" onchange="syncSliderWithSelect()"
+                class="w-full bg-[#fdfcf9] border border-[#c5b896] rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-700 focus:outline-none">
+                <option value="TL01|ด้ามไม้ (10 นิ้ว)|65|55" selected>10 นิ้ว (280mm.x120mm.) - ด้ามไม้</option>
+                <option value="TL02|ด้ามพลาสติก (10 นิ้ว)|68|58">10 นิ้ว (280mm.x120mm.) - ด้ามพลาสติก</option>
+                <option value="TL03|ด้ามพลาสติกหวี (10 นิ้ว)|68|58">10 นิ้ว (280mm.x120mm.) - ด้ามพลาสติกหวี</option>
+            </select>
+        </div>
+
+        <!-- 3. จำนวน -->
+        <div>
+            <label class="block text-[10px] font-bold text-slate-700 mb-1">ระบุจำนวน (ชิ้น)</label>
+            <div class="flex items-center bg-[#fdfcf9] border border-[#c5b896] rounded-xl overflow-hidden">
+                <button type="button" onclick="stepQty(-1)"
+                    class="px-3 py-2 text-slate-500 hover:bg-slate-100 font-bold">-</button>
+                <input id="product-qty-input" type="number" value="1" min="1"
+                    class="w-full bg-[#fdfcf9] text-center text-xs font-bold text-slate-700 focus:outline-none">
+                <button type="button" onclick="stepQty(1)"
+                    class="px-3 py-2 text-slate-500 hover:bg-slate-100 font-bold">+</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="handleOrderSubmit()"
+        class="w-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 hover:brightness-105 text-white font-black py-3.5 rounded-full shadow-md text-xs uppercase tracking-wider transition-all">
+        <i class="fa-solid fa-cart-plus mr-1"></i> เพิ่มสินค้าลงตะกร้า & ดำเนินการต่อ
+    </button>
+</div>
+
+    <script>
+        // --- Image Slider Logic (แก้ไขสูตรขยับทีละ -100% เต็มหน้ากว้างจริงของบล็อก) ---
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const sliderWrapper = document.getElementById('image-slider-wrapper');
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            // เปลี่ยนสูตรให้เลื่อนทีละ -100% เต็มกรอบ แทนสูตรหารสัดส่วนอันเดิม
+            sliderWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-[#1e2d4a]/30');
+                    dot.classList.add('bg-[#1e2d4a]');
+                } else {
+                    dot.classList.remove('bg-[#1e2d4a]');
+                    dot.classList.add('bg-[#1e2d4a]/30');
+                }
+            });
+        }
+
+        function moveSlider(direction) {
+            currentSlide += direction;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            updateSlider();
+        }
+
+        function syncSliderWithSelect() {
+            const selectElement = document.getElementById('product-size-select');
+            const selectedIndex = selectElement.selectedIndex;
+            if (selectedIndex >= 0 && selectedIndex < totalSlides) {
+                currentSlide = selectedIndex;
+                updateSlider();
+            }
+        }
+
+        // --- Quantity Controls ---
+        function stepQty(amount) {
+            const qtyInput = document.getElementById('product-qty-input');
+            if (!qtyInput) return;
+            let currentVal = parseInt(qtyInput.value) || 1;
+            currentVal += amount;
+            if (currentVal < 1) currentVal = 1;
+            qtyInput.value = currentVal;
+        }
+
+        // --- Form & Submit Logic ---
+        function handleOrderSubmit() {
+            const sizeSelect = document.getElementById('product-size-select');
+            const qtyInput = document.getElementById('product-qty-input');
+            const priceTypeSelect = document.getElementById('price-type-select');
+            if (!sizeSelect || !qtyInput || !priceTypeSelect) return;
+
+            const selectedValue = sizeSelect.value;
+            const [code, details, retailPrice, wholesalePrice] = selectedValue.split('|');
+            const selectedQty = parseInt(qtyInput.value) || 1;
+            const selectedPriceType = priceTypeSelect.value;
+            const selectedPrice = selectedPriceType === 'ราคาส่งยกลัง' ? wholesalePrice : retailPrice;
+
+            const newItem = {
+                id: 'trowel-' + code,
+                name: 'เกรียงสี่เหลี่ยมขัดมัน ' + code,
+                size: details,
+                price: parseFloat(selectedPrice),
+                qty: selectedQty,
+                priceType: selectedPriceType
+            };
+
+            let cart = JSON.parse(localStorage.getItem('shopping_cart')) || [];
+            const existingItemIndex = cart.findIndex(item => item.id === newItem.id);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].qty += newItem.qty;
+            } else {
+                cart.push(newItem);
+            }
+            localStorage.setItem('shopping_cart', JSON.stringify(cart));
+
+            document.getElementById('toast-item-details').innerText = `สินค้า: ${newItem.name} (${newItem.size}) ราคา: ${selectedPrice} บาท/ชิ้น จำนวน: ${selectedQty} PCS`;
+            document.getElementById('modal-spec').innerText = `สเปกขนาด: ${newItem.name} • ${selectedPriceType}`;
+            document.getElementById('modal-qty').innerText = `${selectedQty} PCS`;
+            document.getElementById('modal-price').innerText = `ราคาเฉลี่ย ${selectedPrice} บาท/ชิ้น`;
+
+            const toast = document.getElementById('toast-notification');
+            toast.classList.remove('-translate-y-24', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                closeToast();
+                openModal();
+            }, 1500);
+        }
+
+        function closeToast() {
+            const toast = document.getElementById('toast-notification');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
+        }
+
+        // ฟังก์ชันเพิ่มเติมสำหรับระบบแจ้งเตือนความคิดเห็น (ถ้าจำเป็นต้องใช้)
+        function closeReviewToast() {
+            const toast = document.getElementById('toast-review-notification');
+            toast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
+        }
+
+        if (document.getElementById('comment-form')) {
+            document.getElementById('comment-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const toast = document.getElementById('toast-review-notification');
+                toast.classList.remove('-translate-y-24', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                e.target.reset();
+                setTimeout(() => {
+                    toast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
+                }, 3000);
+            });
+        }
+
+        function openModal() {
+            const modal = document.getElementById('quotation-modal');
+            const modalBox = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('quotation-modal');
+            const modalBox = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+        }
+
+        // --- Star Slider Handler ---
+        const ratingSlider = document.getElementById('rating-slider');
+        const ratingValue = document.getElementById('rating-value');
+        const starDisplay = document.getElementById('star-display');
+
+        if (ratingSlider) {
+            ratingSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                ratingValue.innerText = val.toFixed(1);
+                let starsHTML = '';
+                const fullStars = Math.floor(val);
+                const hasHalf = val % 1 !== 0;
+                for (let i = 0; i < fullStars; i++) starsHTML += '<i class="fa-solid fa-star"></i>';
+                if (hasHalf) starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
+                const emptyStars = 5 - Math.ceil(val);
+                for (let i = 0; i < emptyStars; i++) starsHTML += '<i class="fa-regular fa-star"></i>';
+                starDisplay.innerHTML = starsHTML;
+            });
+        }
+    </script>
+</body>
+
+</html>
