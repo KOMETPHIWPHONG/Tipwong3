@@ -352,46 +352,6 @@ function initRealtimeCustomerSync() {
 }
 
 // ==========================================
-// 📝 ระบบบันทึกอัตโนมัติ (Textarea Auto-save)
-// ==========================================
-const textarea = document.getElementById('my-text');
-const statusText = document.getElementById('status');
-let timer = null;
-
-function saveData(content) {
-    if (!statusText) return;
-    statusText.innerText = 'สถานะ: กำลังบันทึก...';
-    
-    fetch('/api/save', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: content }),
-    })
-    .then(response => {
-        if (response.ok) {
-            statusText.innerText = 'สถานะ: บันทึกแล้ว';
-        } else {
-            statusText.innerText = 'สถานะ: เกิดข้อผิดพลาดในการบันทึก';
-        }
-    })
-    .catch(error => {
-        statusText.innerText = 'สถานะ: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
-    });
-}
-
-if (textarea) {
-    textarea.addEventListener('input', () => {
-        if (statusText) statusText.innerText = 'สถานะ: ยังไม่ได้บันทึก...';
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            saveData(textarea.value);
-        }, 1000);
-    });
-}
-
-// ==========================================
 // 🪟 ระบบ Modal ควบคุมการสั่งซื้อและการจัดส่ง
 // ==========================================
 function openOrderModal() {
